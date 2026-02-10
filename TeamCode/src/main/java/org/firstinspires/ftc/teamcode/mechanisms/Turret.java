@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Turret {
     private Camera camera;
     private Motor outtakeMotor;
     private Motor turretMotor;
+    private Motor transferMotor;
+    private boolean launching;
 
     public Turret(HardwareMap hardwareMap, int goalTag) {
         camera = new Camera(hardwareMap, goalTag);
         outtakeMotor = new Motor("OttakeMotor",hardwareMap);
         turretMotor = new Motor("TurretMotor",hardwareMap);
+        transferMotor = new Motor("TransferMotor",hardwareMap);
     }
 
     public void turnToGoal(double error) {
@@ -26,7 +30,7 @@ public class Turret {
         }
     }
 
-    public double calculateVelocity() {
+    public double calculateVelocityRpm() {
         double g = -9.81;
         double h = 2; //measure and update
         camera.poll();
@@ -40,7 +44,37 @@ public class Turret {
         return 6000/rpm;
     }
 
-    public void setVelocity() {
+    public double calculateVelocityTicks() {
+        double g = -9.81;
+        double h = 2; //measure and update
+        camera.poll();
+        double x = Math.sqrt(camera.getArea()); //will need to multiply by a constant
 
+        double r = .04; //radius
+        double conversionFactor = 537 / (Math.PI * r * 2);
+
+        double square = (g*h*h) / (2*Math.cos(2*Math.PI/3)*(h*Math.tan(Math.PI/3)-x));
+        return Math.sqrt(square) * conversionFactor;
+    }
+
+    public void setVelocity() {
+        outtakeMotor.setVelocity(calculateVelocityTicks());
+    }
+
+    //Gamepad variable needed, need to know which controller button, maybe a toggle?
+    public void launch() {
+//        if(gamepad.a) {
+//            transferMotor.setPower(.5);
+//        }
+//        else {
+//            transferMotor.setPower(0);
+//        }
+        launching = !launching;
+        if(launching) {
+            transferMotor.setPower(.5);
+        }
+        else {
+            transferMotor.setPower(0);
+        }
     }
 }
