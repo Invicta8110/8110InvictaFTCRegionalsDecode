@@ -21,5 +21,26 @@ public class Turret {
         else if(Math.abs(camera.getX())>error) {
             turretMotor.setPower(camera.getX()*.03);
         }
+        else {
+            turretMotor.setPower(0);
+        }
+    }
+
+    public double calculateVelocity() {
+        double g = -9.81;
+        double h = 2; //measure and update
+        camera.poll();
+        double x = Math.sqrt(camera.getArea()); //will need to multiply by a constant
+
+        double r = .04; //radius
+        double conversionFactor = 30 / (Math.PI * r);
+
+        double square = (g*h*h) / (2*Math.cos(2*Math.PI/3)*(h*Math.tan(Math.PI/3)-x));
+        double rpm = Math.sqrt(square) * conversionFactor;
+        return 6000/rpm;
+    }
+
+    public void setVelocity() {
+
     }
 }
