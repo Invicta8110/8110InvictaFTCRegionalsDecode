@@ -12,6 +12,8 @@ public class Turret {
         camera = new Camera(hardwareMap, goalTag);
         outtakeMotor = new Motor("OttakeMotor",hardwareMap);
         turretMotor = new Motor("TurretMotor",hardwareMap);
+
+        outtakeMotor.setDirectionReverse();
     }
 
     public void turnToGoal(double error) {
