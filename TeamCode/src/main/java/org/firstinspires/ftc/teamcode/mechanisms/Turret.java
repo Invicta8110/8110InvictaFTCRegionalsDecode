@@ -7,14 +7,11 @@ public class Turret {
     private Camera camera;
     private Motor outtakeMotor;
     private Motor turretMotor;
-    private Motor transferMotor;
-    private boolean launching;
 
     public Turret(HardwareMap hardwareMap, int goalTag) {
         camera = new Camera(hardwareMap, goalTag);
         outtakeMotor = new Motor("OttakeMotor",hardwareMap);
         turretMotor = new Motor("TurretMotor",hardwareMap);
-        transferMotor = new Motor("TransferMotor",hardwareMap);
     }
 
     public void turnToGoal(double error) {
@@ -59,22 +56,5 @@ public class Turret {
 
     public void setVelocity() {
         outtakeMotor.setVelocity(calculateVelocityTicks());
-    }
-
-    //Gamepad variable needed, need to know which controller button, maybe a toggle?
-    public void launch() {
-//        if(gamepad.a) {
-//            transferMotor.setPower(.5);
-//        }
-//        else {
-//            transferMotor.setPower(0);
-//        }
-        launching = !launching;
-        if(launching) {
-            transferMotor.setPower(.5);
-        }
-        else {
-            transferMotor.setPower(0);
-        }
     }
 }
