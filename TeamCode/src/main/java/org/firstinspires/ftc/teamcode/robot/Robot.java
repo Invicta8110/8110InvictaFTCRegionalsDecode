@@ -18,9 +18,11 @@ public class Robot {
         base.drive(fRight,fLeft,bRight,bLeft);
     }
 
-    public void updateBase(boolean intake, boolean transfer) {
-        base.intake(intake);
-        base.transfer(transfer,intake);
+    public void updateBase(boolean intake, boolean transfer, boolean reverse) {
+//        base.intake(intake);
+//        base.transfer(transfer,intake);
+        base.intakeAndTransfer(intake,transfer);
+        base.emergencyReverseIntake(reverse);
     }
 
     public void updateTurret() {
