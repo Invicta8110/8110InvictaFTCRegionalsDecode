@@ -10,7 +10,7 @@ public class TestTeleOp extends OpMode {
     private Robot robot;
 
     public void init() {
-        robot = new Robot(hardwareMap,24);
+        robot = new Robot(hardwareMap,24,telemetry);
     }
 
     public void loop() {

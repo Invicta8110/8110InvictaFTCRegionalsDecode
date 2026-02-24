@@ -5,6 +5,8 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +18,9 @@ public class Camera {
     private double area;
     private boolean tagFound;
     private ArrayList<Integer> tags;
+    private Telemetry telemetry;
 
-    public Camera(HardwareMap hardwareMap, int goalTag) {
+    public Camera(HardwareMap hardwareMap, int goalTag, Telemetry telemetry) {
         //initial setup
         limelight = hardwareMap.get(Limelight3A.class,"limelight");
         limelight.setPollRateHz(100);
@@ -25,6 +28,9 @@ public class Camera {
         limelight.pipelineSwitch(0);
 
         this.goalTag = goalTag;
+        this.telemetry = telemetry;
+        telemetry.addData("Initialized",this);
+        telemetry.update();
     }
 
     public void poll() {
@@ -53,6 +59,7 @@ public class Camera {
                 tagFound = false;
             }
         }
+        telemetry.addData("Tags",tags);
     }
 
     public double getX() {

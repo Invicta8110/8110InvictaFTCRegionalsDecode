@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.Base;
 import org.firstinspires.ftc.teamcode.mechanisms.Turret;
 
@@ -9,9 +10,9 @@ public class Robot {
     private Base base;
     private Turret turret;
 
-    public Robot(HardwareMap hardwareMap, int goalTag) {
+    public Robot(HardwareMap hardwareMap, int goalTag, Telemetry telemetry) {
         base = new Base(hardwareMap);
-        turret = new Turret(hardwareMap,goalTag);
+        turret = new Turret(hardwareMap,goalTag,telemetry);
     }
 
     public void drive(double fRight, double fLeft, double bRight, double bLeft) {
