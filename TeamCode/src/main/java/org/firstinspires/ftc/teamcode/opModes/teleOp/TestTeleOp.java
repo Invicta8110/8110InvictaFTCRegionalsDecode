@@ -14,7 +14,7 @@ public class TestTeleOp extends OpMode {
     }
 
     public void loop() {
-        robot.updateTurret();
+        robot.updateTurret(gamepad1.left_trigger-gamepad1.right_trigger,gamepad1.y,gamepad1.b);
         robot.updateBase(gamepad1.a,gamepad1.x,gamepad1.left_bumper);
 
         drive();

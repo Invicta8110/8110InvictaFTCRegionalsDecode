@@ -10,6 +10,7 @@ public class Turret {
     private Motor outtakeMotor;
     private Motor turretMotor;
     private Telemetry telemetry;
+    private boolean manual;
 
     public Turret(HardwareMap hardwareMap, int goalTag, Telemetry telemetry) {
         camera = new Camera(hardwareMap, goalTag,telemetry);
@@ -18,6 +19,7 @@ public class Turret {
 
         outtakeMotor.setDirectionReverse();
         this.telemetry = telemetry;
+        manual = false;
     }
 
     public void turnToGoal(double error) {
@@ -83,5 +85,15 @@ public class Turret {
         //outtakeMotor.setVelocity(calculateVelocityTicks()/500);
         outtakeMotor.setPower(calculateVelocityRpm());
         //outtakeMotor.setPower(-.8);
+    }
+
+    public void changeManual() {
+        manual = !manual;
+    }
+
+    public void manualRotate(double speed) {
+        if(manual) {
+            turretMotor.setPower(speed);
+        }
     }
 }

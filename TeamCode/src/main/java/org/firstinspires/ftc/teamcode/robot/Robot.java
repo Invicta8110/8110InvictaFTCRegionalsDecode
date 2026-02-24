@@ -9,10 +9,12 @@ import org.firstinspires.ftc.teamcode.mechanisms.Turret;
 public class Robot {
     private Base base;
     private Turret turret;
+    private boolean manual;
 
     public Robot(HardwareMap hardwareMap, int goalTag, Telemetry telemetry) {
         base = new Base(hardwareMap);
         turret = new Turret(hardwareMap,goalTag,telemetry);
+        manual = false;
     }
 
     public void drive(double fRight, double fLeft, double bRight, double bLeft) {
@@ -26,8 +28,20 @@ public class Robot {
         base.emergencyReverseIntake(reverse);
     }
 
-    public void updateTurret() {
-        turret.turnToGoal(.5);
+    public void updateTurret(double rotateSpeed, boolean manualOn, boolean manualOff) {
+        if(manualOn) {
+            manual = true;
+        }
+        else if(manualOff) {
+            manual = false;
+        }
+
+        if(manual) {
+            turret.manualRotate(rotateSpeed);
+        }
+        else {
+            turret.turnToGoal(.5);
+        }
         turret.setVelocity();
     }
 }
