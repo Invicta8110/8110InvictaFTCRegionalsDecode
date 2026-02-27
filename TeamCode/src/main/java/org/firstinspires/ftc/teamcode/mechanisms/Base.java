@@ -21,6 +21,7 @@ public class Base {
         bRight.setDirectionReverse();
 
         intakeMotor = new Motor("IntakeMotor",hardwareMap);
+        intakeMotor.setDirectionReverse();
         transferMotor = new Motor("TransferMotor",hardwareMap);
         transferMotor.setDirectionReverse();
     }
