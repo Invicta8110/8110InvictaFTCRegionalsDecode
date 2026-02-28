@@ -11,8 +11,9 @@ public class Turret {
     private Motor turretMotor;
     private Telemetry telemetry;
     private boolean manual;
-    private final double MAXROTATION = 150;
-    private boolean direction;
+    private final double MAXROTATION = 700;
+    private final double MINROTATION = -500;
+    private int direction;
 
     public Turret(HardwareMap hardwareMap, int goalTag, Telemetry telemetry) {
         camera = new Camera(hardwareMap, goalTag,telemetry);
@@ -22,7 +23,7 @@ public class Turret {
         outtakeMotor.setDirectionReverse();
         this.telemetry = telemetry;
         manual = false;
-        direction = true; //right
+        direction = 1; //right
     }
 
     public void turnToGoal(double error) {
@@ -30,17 +31,17 @@ public class Turret {
 
         //set correct direction
         if(turretMotor.getPosition()>MAXROTATION) {
-            direction = false;
+            direction = -1;
         }
         if(turretMotor.getPosition()<-MAXROTATION) {
-            direction = true;
+            direction = 1;
         }
 
         //set motor power for turning
         if(!camera.tagFound()) {
             turretMotor.setPower(.1);
         }
-        else if(!camera.tagFound()&&!direction) {
+        else if(!camera.tagFound()) {
             turretMotor.setPower(-.1);
         }
         else if(Math.abs(camera.getX())>error) {
@@ -49,6 +50,31 @@ public class Turret {
         else {
             turretMotor.setPower(0);
         }
+
+        telemetry.addData("Turret",turretMotor.getPosition());
+    }
+
+    public void turnToGoalv2(double error) {
+        //set correct direction
+        if(turretMotor.getPosition()>MAXROTATION) {
+            direction = -1;
+        }
+        if(turretMotor.getPosition()<MINROTATION) {
+            direction = 1;
+        }
+
+        //set motor power for turning
+        if(!camera.tagFound()) {
+            turretMotor.setPower(.15*direction);
+        }
+        else if(Math.abs(camera.getX())>error) {
+            turretMotor.setPower(camera.getX()*.01);
+        }
+        else {
+            turretMotor.setPower(0);
+        }
+
+        telemetry.addData("Turret",turretMotor.getPosition());
     }
 
     public double calculateVelocityRpm() {
@@ -100,12 +126,16 @@ public class Turret {
     public void setVelocity() {
         //outtakeMotor.setVelocity(calculateVelocityTicks()/500);
         telemetry.addData("Launching",0);
-        if(calculateVelocityRpm()*10>1) {
-            outtakeMotor.setPower(1);
-        }
-        else {
-            outtakeMotor.setPower(calculateVelocityRpm());
-        }
+        double v = calculateVelocityRpm();
+//        if(calculateVelocityRpm()*10>1) {
+//            outtakeMotor.setPower(1);
+//        }
+//        else {
+//            outtakeMotor.setPower(calculateVelocityRpm());
+//        }
+
+        outtakeMotor.setPower(v);
+
         //outtakeMotor.setPower(-.8);
     }
 

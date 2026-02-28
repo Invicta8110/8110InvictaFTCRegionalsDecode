@@ -40,7 +40,7 @@ public class Robot {
             turret.manualRotate(rotateSpeed);
         }
         else {
-            turret.turnToGoal(.5);
+            turret.turnToGoalv2(.5);
         }
         turret.setVelocity();
     }

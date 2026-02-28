@@ -2,21 +2,33 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.mechanisms.Motor;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
 public class TestTeleOp extends OpMode {
-    private Robot robot;
+    private Motor fRight;
+    private Motor fLeft;
+    private Motor bRight;
+    private Motor bLeft;
+    private Motor turretMotor;
 
     public void init() {
-        robot = new Robot(hardwareMap,24,telemetry);
+        fRight = new Motor("front_right_drive",hardwareMap);
+        fLeft = new Motor("front_left_drive",hardwareMap);
+        bRight = new Motor("back_right_drive",hardwareMap);
+        bLeft = new Motor("back_left_drive",hardwareMap);
+
+        fRight.setDirectionReverse();
+        bRight.setDirectionReverse();
+
+        turretMotor = new Motor("TurretMotor",hardwareMap);
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void loop() {
-        robot.updateTurret(gamepad1.left_trigger-gamepad1.right_trigger,gamepad1.y,gamepad1.b);
-        robot.updateBase(gamepad1.a,gamepad1.x,gamepad1.left_bumper);
-
         drive();
     }
 
@@ -30,6 +42,19 @@ public class TestTeleOp extends OpMode {
         double bRightPower = y + x - rx;
         double bLeftPower = y - x + rx;
 
-        robot.drive(fRightPower, fLeftPower, bRightPower, bLeftPower);
+        telemetry.addData("fRight",fRightPower);
+        telemetry.addData("fLeft",fLeftPower);
+        telemetry.addData("bRight",bRightPower);
+        telemetry.addData("bLeft",bLeftPower);
+
+
+        fRight.setPower(fRightPower);
+        fLeft.setPower(fLeftPower);
+        bRight.setPower(bRightPower);
+        bLeft.setPower(bLeftPower);
+
+        turretMotor.setPower(gamepad1.right_trigger-gamepad1.left_trigger);
+
+        telemetry.addData("Turret",turretMotor.getPosition());
     }
 }
